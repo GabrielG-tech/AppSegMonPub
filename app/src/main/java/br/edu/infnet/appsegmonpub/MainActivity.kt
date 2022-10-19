@@ -111,6 +111,7 @@ class MainActivity : AppCompatActivity() {
     }
 
 
+
     private fun createDeleteFile() {
         val file = File(getExternalFilesDir(null), "DemoFile.txt")
         if (file.exists()) {
