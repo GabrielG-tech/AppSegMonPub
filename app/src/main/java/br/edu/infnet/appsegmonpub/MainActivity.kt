@@ -17,11 +17,9 @@ import android.app.AlertDialog
 import android.content.pm.PackageManager
 import android.util.Log
 import android.view.WindowManager.InvalidDisplayException
+import android.widget.Toast
 import androidx.core.app.ActivityCompat
-import java.io.File
-import java.io.FileOutputStream
-import java.io.IOException
-import java.io.OutputStream
+import java.io.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -120,7 +118,7 @@ class MainActivity : AppCompatActivity() {
         } else {
             try {
                 val os: OutputStream = FileOutputStream(file)
-                os.write("Pequeno Teste/n Com Quebra de Linha.".toByteArray())
+                os.write("Pequeno Teste\nCom Quebra de Linha.".toByteArray())
                 os.close()
             } catch (e: IOException) {
                 Log.d("Permissão", "Erro de escrita em arquivo")
@@ -129,14 +127,47 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun callReadFromExternalStorage(view: View) {
-
-
-        readFile()
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) !=
+            PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(
+                    this, Manifest.permission.READ_EXTERNAL_STORAGE
+                )) {
+                callDialog( "É preciso a liberar READ_EXTERNAL_STORAGE",
+                    arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE))
+            } else {
+                ActivityCompat.requestPermissions(this,
+                    arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
+                    REQUEST_PERMISSIONS_CODE)
+            }
+        } else {
+            readFile()
+        }
     }
 
     private fun readFile() {
-
+        val file = File(getExternalFilesDir(null), "DemoFile.txt")
+        if(!file.exists()) {
+            Toast.makeText(this@MainActivity,
+                "Arquivo não encontrado",
+                Toast.LENGTH_SHORT).show()
+            return
+        }
+        val text = StringBuilder()
+        try {
+            val br = BufferedReader(FileReader(file))
+            var line: String?
+            while (br.readLine().also { line = it } != null) {
+                text.append(line)
+                text.append('\n')
+            }
+            br.close()
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+        Toast.makeText(this@MainActivity,
+            text.toString(),
+            Toast.LENGTH_SHORT).show()
     }
-
-
 }
+
+
