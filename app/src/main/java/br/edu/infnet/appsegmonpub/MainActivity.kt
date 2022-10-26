@@ -51,7 +51,6 @@ class MainActivity : AppCompatActivity() {
             super.onBackPressed()
     }
 
-
     fun callLoadImage(view: View) {
         val iv: ImageView = findViewById(R.id.iv_logo)
         Picasso.get()
@@ -64,7 +63,8 @@ class MainActivity : AppCompatActivity() {
 
     fun callWriteOnExternalStorage(view: View) {
         // Setar Permissões
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) !=
+        if (ContextCompat.checkSelfPermission(
+                this, Manifest.permission.WRITE_EXTERNAL_STORAGE) !=
             PackageManager.PERMISSION_GRANTED
         ) {
             if (ActivityCompat.shouldShowRequestPermissionRationale(
@@ -90,7 +90,6 @@ class MainActivity : AppCompatActivity() {
     // Permissões -  INI
     private val REQUEST_PERMISSIONS_CODE = 12800
 
-
     private fun callDialog(message: String, permissions: Array<String>) {
         var mDialog = AlertDialog.Builder(this)
             .setTitle("Permissão")
@@ -110,8 +109,6 @@ class MainActivity : AppCompatActivity() {
         mDialog.show()
     }
 
-
-
     private fun createDeleteFile() {
         val file = File(getExternalFilesDir(null), "DemoFile.txt")
         if (file.exists()) {
@@ -129,16 +126,22 @@ class MainActivity : AppCompatActivity() {
 
     fun callReadFromExternalStorage(view: View) {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) !=
-            PackageManager.PERMISSION_GRANTED) {
+            PackageManager.PERMISSION_GRANTED
+        ) {
             if (ActivityCompat.shouldShowRequestPermissionRationale(
                     this, Manifest.permission.READ_EXTERNAL_STORAGE
-                )) {
-                callDialog( "É preciso a liberar READ_EXTERNAL_STORAGE",
-                    arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE))
+                )
+            ) {
+                callDialog(
+                    "É preciso a liberar READ_EXTERNAL_STORAGE",
+                    arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE)
+                )
             } else {
-                ActivityCompat.requestPermissions(this,
+                ActivityCompat.requestPermissions(
+                    this,
                     arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
-                    REQUEST_PERMISSIONS_CODE)
+                    REQUEST_PERMISSIONS_CODE
+                )
             }
         } else {
             readFile()
@@ -147,10 +150,12 @@ class MainActivity : AppCompatActivity() {
 
     private fun readFile() {
         val file = File(getExternalFilesDir(null), "DemoFile.txt")
-        if(!file.exists()) {
-            Toast.makeText(this@MainActivity,
+        if (!file.exists()) {
+            Toast.makeText(
+                this@MainActivity,
                 "Arquivo não encontrado",
-                Toast.LENGTH_SHORT).show()
+                Toast.LENGTH_SHORT
+            ).show()
             return
         }
         val text = StringBuilder()
@@ -165,10 +170,15 @@ class MainActivity : AppCompatActivity() {
         } catch (e: IOException) {
             e.printStackTrace()
         }
-        Toast.makeText(this@MainActivity,
+        Toast.makeText(
+            this@MainActivity,
             text.toString(),
-            Toast.LENGTH_SHORT).show()
+            Toast.LENGTH_SHORT
+        ).show()
     }
+
+
+
 }
 
 
